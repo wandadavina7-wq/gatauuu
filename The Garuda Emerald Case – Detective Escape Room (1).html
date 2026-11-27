@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Garuda Emerald Case · Detective Escape Room</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--ink:#1c1612;--navy:#0d2540;--gold:#f5c542;--paper:#f3ead2;--panel:#dfe6ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:radial-gradient(circle at 50% 0,#1f4468,#09131f 80%) #09131f;color:#eef4fa;font:17px/1.55 Barlow,Arial,sans-serif;padding-bottom:calc(84px + env(safe-area-inset-bottom,0px));min-height:100vh}
+h1,h2,h3,.cd{font-family:"Barlow Condensed",Impact,sans-serif;font-weight:700;margin:.2em 0 .3em;letter-spacing:.02em}
+#hud{display:flex;align-items:center;gap:10px;padding:8px 12px;background:linear-gradient(#1c3a5c,#0d2540);border-bottom:3px solid #06121f;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.lvl{width:42px;height:42px;border-radius:50%;background:radial-gradient(#8ab6e0,#2c5d8f);border:3px solid #cfd8e3;display:flex;align-items:center;justify-content:center;font:700 16px "Barlow Condensed"}
+.bar{flex:1;height:22px;border:3px solid #06121f;border-radius:12px;background:#07182a;overflow:hidden;position:relative}
+.bar i{display:block;height:100%;background:linear-gradient(#7cc4ff,#1e78c8);transition:width .6s}
+.bar span{position:absolute;inset:0;text-align:center;font:700 13px/16px "Barlow Condensed"}
+.chip{background:#07182a;border:2px solid #06121f;border-radius:14px;padding:1px 10px;font:700 17px "Barlow Condensed";white-space:nowrap}
+main{max-width:940px;margin:0 auto;padding:14px}
+.gb{font:700 18px "Barlow Condensed";letter-spacing:.04em;color:#fff;text-shadow:0 1px 0 #0007;background:linear-gradient(#72bdf0,#2b74b3);border:2px solid #0a2640;border-radius:9px;padding:9px 18px;cursor:pointer;box-shadow:inset 0 1px 0 #fff7,0 3px 0 #0a2640;margin:4px 4px 6px 0;display:inline-block;text-decoration:none}
+.gb.gold{background:linear-gradient(#ffe27a,#e0a017);color:#3a2600;text-shadow:0 1px 0 #fff8;border-color:#6b4a00;box-shadow:inset 0 1px 0 #fff9,0 3px 0 #6b4a00}
+.gb.red{background:linear-gradient(#f07878,#b02a2a);border-color:#4a0f0f}
+.gb:active{transform:translateY(2px)}.gb:disabled{filter:grayscale(1);opacity:.55}
+.gb:focus-visible,.obj:focus-visible,input:focus-visible,.sp:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.panel{background:linear-gradient(#eaf0f6,#cbd5e0);border:3px solid #12263b;border-radius:12px;color:#14283c;padding:16px 18px;margin-bottom:14px;box-shadow:0 6px 0 #06121f66;position:relative}
+.paper{background:var(--paper);border-color:#3a2f1a;color:#2b2113}
+.paper p,.panel p{margin:.5em 0}
+h2,h3{color:inherit}
+.panel h2{font-size:30px}
+.stamp{position:absolute;top:10px;right:12px;font:700 18px "Barlow Condensed";color:#c0272d;border:3px solid #c0272d;border-radius:4px;padding:0 8px;transform:rotate(6deg);opacity:.85}
+.tc{text-align:center}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;gap:6px;justify-content:center;padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));background:linear-gradient(#17314f,#0a1a2d);border-top:3px solid #06121f;z-index:6}
+nav button{flex:1;max-width:170px;margin:0;padding:6px 4px;font-size:15px;line-height:1.1}
+nav button b{display:block;font-size:20px}
+input{width:100%;padding:10px;font:inherit;border:3px solid #12263b;background:#fff;color:#14283c;border-radius:8px;margin:2px 0 10px}
+.err{color:#b02a2a;min-height:1.4em;font-weight:600}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;background:linear-gradient(#fff,#e6edf4);color:#14283c;border:3px solid #12263b;border-radius:9px;padding:9px 12px;font:600 17px Barlow;cursor:pointer}
+.opt.good{background:#bdeccb;border-color:#1f8a46}.opt.bad{background:#f6c0c0;border-color:#b02a2a}
+.q{margin:16px 0;padding-top:10px;border-top:3px dashed #9aa9b8}
+.hint{background:#fff1a8;border:2px solid #b89a1a;padding:6px 10px;border-radius:8px;margin-top:6px}
+.node{display:flex;gap:12px;align-items:center;padding:10px;border:3px solid #12263b;border-radius:10px;margin:10px 0;background:#f3f6fa}
+.node.done{border-color:#1f8a46;background:#e3f6e9}.node.lock{opacity:.55}
+.node b{font:700 22px "Barlow Condensed"}
+.badge{min-width:46px;height:46px;border-radius:50%;background:#12263b;color:#fff;display:flex;align-items:center;justify-content:center;font:700 22px "Barlow Condensed"}
+.node.done .badge{background:#1f8a46}
+.i{background:#ffd98a;padding:0 3px;border-radius:3px}.d{background:#b9dfc4;padding:0 3px;border-radius:3px}
+.gl{color:#5b4a2a;font-size:15px;border-left:4px solid #c9a24a;padding-left:8px;margin-top:10px}
+.obj,.sp{cursor:pointer;transition:transform .2s,filter .2s;transform-box:fill-box;transform-origin:center}
+.obj:hover,.obj:focus,.sp:hover,.sp:focus{transform:translateY(-5px);filter:drop-shadow(0 0 8px #ffe08a)}
+.lab{font:700 17px "Barlow Condensed";fill:#fff;text-anchor:middle}
+.scroll{overflow-x:auto;border-radius:12px;border:3px solid #12263b}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:10px 0}
+.tile{background:linear-gradient(#e4ebf2,#bcc8d5);border:3px solid #5d7189;border-radius:10px;text-align:center;padding:8px 4px;font:700 18px "Barlow Condensed"}
+.tile div{font-size:34px;line-height:1.1}
+.ev{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.evc{display:flex;gap:10px;align-items:center;background:#f3f6fa;border:3px solid #12263b;border-radius:10px;padding:8px;min-height:92px}
+.evc .ic{min-width:64px;height:64px;border-radius:10px;background:#0d2540;display:flex;align-items:center;justify-content:center;font-size:36px}
+.evc.lk{filter:grayscale(1);opacity:.6}
+.modal{position:fixed;inset:0;background:#000c;display:flex;padding:14px;z-index:10;overflow:auto}
+.modal .panel{max-width:600px;width:100%;margin:auto}
+.cover{min-height:78vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;border-radius:14px;padding:30px 14px}
+.tape{position:absolute;left:-10%;width:120%;height:34px;background:repeating-linear-gradient(-45deg,#f5c542 0 22px,#1c1612 22px 44px);box-shadow:0 4px 0 #0006}
+.ttl{font-size:clamp(44px,11vw,92px);line-height:.95;color:var(--gold);-webkit-text-stroke:3px #3a2600;paint-order:stroke fill;text-shadow:0 6px 0 #3a2600,0 0 30px #44e08c88;margin:.1em 0}
+.pulse{animation:p 1.2s infinite}@keyframes p{50%{transform:scale(1.25)}}
+.fade{animation:f .4s}@keyframes f{from{opacity:0;transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){.fade,.pulse{animation:none}.obj,.sp,.bar i{transition:none}}
+</style></head><body>
+<div id="hud" hidden></div><main id="app"></main><nav id="nav" hidden></nav>
+<script>
+const $=s=>document.querySelector(s),app=$("#app"),KEY="garuda_v2",L="#1c1612";
+const S0={name:"",cls:"",email:"",step:0,score:0,hints:0,elim:[]};let S={...S0},cur=null;
+try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.name)S=d}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}},esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+/* AUDIO */
+let AC,master,muted=false;
+function tone(f,t,d,y,v){const o=AC.createOscillator(),g=AC.createGain();o.type=y;o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(master);o.start(t);o.stop(t+d+.05)}
+function initAudio(){if(AC)return;try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return}
+ master=AC.createGain();master.gain.value=muted?0:.5;master.connect(AC.destination);
+ const b=[73.4,0,110,0,87.3,0,110,0,65.4,0,98,0,82.4,0,110,0],ch=[[146.8,174.6,220],[130.8,164.8,196]],sc=[587,698,880,1047,784];let nx=AC.currentTime+.2,i=0;
+ setInterval(()=>{while(nx<AC.currentTime+.6){if(b[i%16])tone(b[i%16],nx,.9,"triangle",.13);if(i%8==0)ch[(i/8)%2].forEach(f=>tone(f,nx,5,"sine",.025));if(i%4==2)tone(2400,nx,.05,"square",.008);if(Math.random()<.12)tone(sc[Math.floor(Math.random()*5)],nx,1.6,"sine",.018);nx+=.6;i++}},200)}
+function sfx(k){if(!AC)return;if(AC.state=="suspended")AC.resume();const t=AC.currentTime;
+ if(k=="click")tone(520,t,.07,"square",.05);if(k=="ok"){tone(660,t,.15,"triangle",.12);tone(880,t+.12,.25,"triangle",.12)}
+ if(k=="bad")tone(140,t,.3,"sawtooth",.08);if(k=="rev")[440,554,659,880,1109].forEach((f,j)=>tone(f,t+j*.11,.5,"triangle",.1))}
+const mute=()=>{muted=!muted;if(master)master.gain.value=muted?0:.5;hud()};
+document.addEventListener("click",e=>{if(e.target.closest("button,.obj,.sp,a.gb"))sfx("click")});
+/* AVATAR (Criminal Case style: thick outline, flat colours) */
+function person(o){const h=o.hc,w=o.b?[6,194]:[26,174],hs={
+ long:[`<path d="M48 108C32 38 168 38 152 108C164 150 154 205 168 236L32 236C46 205 36 150 48 108Z" fill="${h}"/>`,`<path d="M54 94C50 36 150 36 146 94C130 62 78 56 54 94Z" fill="${h}"/>`],
+ short:["",`<path d="M54 90C50 34 150 34 146 90C134 62 66 62 54 90Z" fill="${h}"/>`],
+ spiky:["",`<path d="M54 90L48 52L70 62L74 30L94 52L108 26L120 52L142 38L146 90C130 64 70 64 54 90Z" fill="${h}"/>`],
+ curly:["",`<g fill="${h}">${[58,76,96,116,136,146].map((x,i)=>`<circle cx="${x}" cy="${[70,52,46,50,56,76][i]}" r="17"/>`).join("")}</g>`],
+ bun:[`<circle cx="100" cy="32" r="19" fill="${h}"/>`,`<path d="M54 92C50 36 150 36 146 92C132 62 68 62 54 92Z" fill="${h}"/>`]}[o.hs];
+ const x=o.x||[],rx=o.b?46:40;
+ const g=o.gl=="round"?`<g fill="#bfe3ff66"><circle cx="80" cy="95" r="15"/><circle cx="120" cy="95" r="15"/></g><path d="M95 93h10"/>`:o.gl=="sq"?`<g fill="#bfe3ff66"><rect x="64" y="83" width="31" height="24" rx="5"/><rect x="105" y="83" width="31" height="24" rx="5"/></g><path d="M95 92h10"/>`:"";
+ return `<svg viewBox="0 0 200 262" xmlns="http://www.w3.org/2000/svg"><g stroke="${L}" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">${hs[0]}
+ <path d="M${w[0]} 262C${w[0]} 205 ${w[0]+22} 172 84 166L116 166C${w[1]-22} 172 ${w[1]} 205 ${w[1]} 262Z" fill="${o.tc}"/>
+ <path d="M86 128h28v44c-8 9-20 9-28 0z" fill="${o.sk}"/><path d="M86 150q14 12 28 0" fill="none" stroke="#0003"/>
+ <path d="M84 166L100 198L116 166Z" fill="${o.col}"/>
+ ${x.includes("zip")?`<path d="M100 198V262" fill="none"/>`:""}${x.includes("vest")?`<path d="M${w[0]+6} 262L${w[0]+14} 190L90 172L100 262ZM${w[1]-6} 262L${w[1]-14} 190L110 172L100 262Z" fill="#f2c230"/>`:""}
+ ${x.includes("over")?`<path d="M62 262L72 176L88 170L84 262ZM138 262L128 176L112 170L116 262Z" fill="#2b6fb5"/><circle cx="76" cy="214" r="4" fill="#f5c542"/><circle cx="124" cy="214" r="4" fill="#f5c542"/>`:""}
+ ${x.includes("scarf")?`<path d="M76 156Q100 184 124 156L130 178Q100 206 70 178Z" fill="#c0272d"/><path d="M112 190l12 42l16-6l-8-40z" fill="#c0272d"/>`:""}
+ ${x.includes("pearls")?`<g fill="#fff">${[78,84,92,100,108,116,122].map((px,i)=>`<circle cx="${px}" cy="${178+[0,8,13,15,13,8,0][i]}" r="5"/>`).join("")}</g>`:""}
+ ${x.includes("badge")?`<path d="M128 206l9 4v10q0 8-9 12q-9-4-9-12v-10z" fill="#f5c542"/>`:""}
+ <circle cx="${100-rx-2}" cy="100" r="9" fill="${o.sk}"/><circle cx="${100+rx+2}" cy="100" r="9" fill="${o.sk}"/>
+ <ellipse cx="100" cy="92" rx="${rx}" ry="48" fill="${o.sk}"/>
+ <g stroke-width="0"><ellipse cx="80" cy="96" rx="9" ry="6.5" fill="#fff"/><ellipse cx="120" cy="96" rx="9" ry="6.5" fill="#fff"/><circle cx="81" cy="96" r="4.5" fill="${o.ey||"#3b2412"}"/><circle cx="119" cy="96" r="4.5" fill="${o.ey||"#3b2412"}"/></g>
+ <path d="M68 80q12-8 24 0M108 80q12-8 24 0" fill="none" stroke="${h}" stroke-width="5"/>
+ <path d="M100 100q-6 14 3 17" fill="none" stroke-width="3"/><path d="M86 127q14 10 28 0" fill="none" stroke-width="3.5"/>
+ ${o.mu?`<path d="M82 121q18-10 36 0q-18 5-36 0z" fill="${h}"/>`:""}
+ ${hs[1]}${g}
+ ${o.er=="pearl"?`<circle cx="${100-rx-3}" cy="116" r="6" fill="#fff"/><circle cx="${100+rx+3}" cy="116" r="6" fill="#fff"/>`:o.er=="hoop"?`<circle cx="${100-rx-3}" cy="118" r="8" fill="none" stroke="#e0a017"/><circle cx="${100+rx+3}" cy="118" r="8" fill="none" stroke="#e0a017"/>`:""}
+ </g></svg>`}
+const SUS={
+ lina:{n:"Ms. Lina",j:"Tour guide",cm:172,g:"Female",hair:"Long, straight, black",gl:"No glasses",ac:"Red scarf",f:"Friendly and loud",o:{sk:"#c68a5c",hc:"#1b1410",hs:"long",tc:"#e8e2d4",col:"#fff",x:["scarf"],er:"hoop"}},
+ hadi:{n:"Mr. Hadi",j:"Museum cleaner",cm:178,g:"Male",hair:"Short, grey",gl:"Square glasses",ac:"Blue overall",f:"Kind and talkative",o:{sk:"#d9a273",hc:"#9a9a9a",hs:"short",tc:"#7b8794",col:"#fff",gl:"sq",x:["over"]}},
+ toni:{n:"Mr. Toni",j:"Ticket seller",cm:155,g:"Male",hair:"Short, curly, black",gl:"Round glasses",ac:"Yellow vest",f:"Funny and noisy",o:{sk:"#e8b88a",hc:"#1b1410",hs:"curly",tc:"#8a5a2b",col:"#fff",gl:"round",mu:1,b:1,x:["vest"]}},
+ nadia:{n:"Nadia",j:"Art student",cm:170,g:"Female",hair:"Long, straight, black",gl:"Round glasses",ac:"Pearl earrings, blue jacket",f:"Shy and quiet",o:{sk:"#f0c8a0",hc:"#1b1410",hs:"long",tc:"#2f6fc0",col:"#fff",gl:"round",x:["zip"],er:"pearl"}},
+ rizky:{n:"Rizky",j:"Security trainee",cm:180,g:"Male",hair:"Short, spiky, brown",gl:"No glasses",ac:"Security badge",f:"Brave and serious",o:{sk:"#d9a273",hc:"#6a4125",hs:"spiky",tc:"#3d4a5a",col:"#fff",x:["badge"]}},
+ dewi:{n:"Mrs. Dewi",j:"Art collector",cm:152,g:"Female",hair:"Grey, tied in a bun",gl:"No glasses",ac:"Pearl necklace",f:"Proud and elegant",o:{sk:"#efc7a0",hc:"#b8b8c0",hs:"bun",tc:"#7a3f9a",col:"#e9d9f2",b:1,x:["pearls"]}}};
+const SK=Object.keys(SUS);
+/* EVIDENCE */
+const hairSvg=`<svg width="44" height="44" viewBox="0 0 44 44"><path d="M6 8C30 4 4 24 36 38" fill="none" stroke="#1b1410" stroke-width="3" stroke-linecap="round"/></svg>`,
+ earSvg=`<svg width="40" height="44" viewBox="0 0 40 44"><path d="M20 4v10" stroke="#e0a017" stroke-width="3"/><circle cx="20" cy="28" r="12" fill="#fff" stroke="#9aa" stroke-width="2"/><circle cx="16" cy="24" r="4" fill="#fffa"/></svg>`,
+ lensSvg=`<svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="17" fill="#bfe3ff99" stroke="#fff" stroke-width="3"/><path d="M22 5L18 22L30 30" stroke="#fff" fill="none"/></svg>`;
+const EV=[["👟","Muddy shoe prints","The steps are very long. A tall person made them."],["🧵","Dark thread","A thread from dark clothes, caught on the glass case."],[hairSvg,"Long black hair","One long, straight, black hair on the floor."],[earSvg,"Pearl earring","A pearl earring! Pearl earrings are usually worn by women."],[lensSvg,"Broken round lens","A lens from round glasses. The thief wears glasses."],["🧥","Blue jacket thread","A blue thread from a jacket, near the emerald case."]];
+/* CONTENT */
+const ROUTE=[{id:"fA",t:"f",k:"A",title:"File 1: Describing People",sub:"Definition, purpose, structure"},{id:"c1",t:"c",k:1,title:"Case 1: Night at the Museum",sub:"The guard’s report"},{id:"c2",t:"c",k:2,title:"Case 2: The Camera Clue",sub:"Continue the investigation"},{id:"fB",t:"f",k:"B",title:"File 2: Language Features",sub:"Adjectives, verbs, pronouns"},{id:"c3",t:"c",k:3,title:"Case 3: The Gift Shop Secret",sub:"Catch the thief!"}];
+const FILES={
+A:[["Why do detectives describe people?","<p>Detective Rina cannot find a thief with just a name. She needs to know: <b>What does the person look like? How does the person behave?</b></p><p>So she reads and writes a special kind of text. It is called a <b>descriptive text</b>.</p>","Detektif butuh gambaran orang, bukan hanya nama."],
+ ["What is a descriptive text?","<p>A <b>descriptive text</b> tells us about a person, an animal, a place or a thing.</p><p>It gives details. The reader can imagine the person, like a picture in the head.</p><p><i>Example:</i> “Ms. Lina is tall and slim. She has long black hair.”</p>","Descriptive text = teks deskriptif, yaitu teks yang menggambarkan sesuatu dengan detail."],
+ ["What is its purpose?","<p>The purpose is <b>to describe a particular person</b> clearly.</p><p>In our case, the description helps the police to <b>recognise the thief</b>. Good details = easy to catch!</p>","Tujuan: menggambarkan seseorang dengan jelas."],
+ ["Structure part 1: Identification","<p>The first part is <span class='i'>Identification</span>. It tells us <b>WHO</b> we describe.</p><p><span class='i'>I want to tell you about a woman in my shop.</span></p><p>Short and simple. Only the person’s name or who the person is.</p>","Identification = pengenalan: siapa yang dideskripsikan."],
+ ["Structure part 2: Description","<p>The second part is <span class='d'>Description</span>. It gives the <b>details</b>. Follow this order:</p><p>1️⃣ Body: tall, slim<br>2️⃣ Face and hair: long black hair<br>3️⃣ Clothes: a blue jacket<br>4️⃣ Personality: shy, quiet</p><p><span class='d'>She is tall and slim. She has long black hair. She wears a blue jacket. She is shy.</span></p>","Description = rincian ciri: tubuh, wajah/rambut, pakaian, sifat."]],
+B:[["Feature 1: Adjectives","<p>An <b>adjective</b> describes a noun (a person or a thing).</p><p>Body: <b>tall, short, slim, fat</b><br>Hair: <b>long, short, curly, straight</b><br>Personality: <b>shy, kind, funny, brave</b></p><p>She is <b>tall</b>. He has <b>curly</b> hair.</p>","Adjective = kata sifat."],
+ ["Feature 2: Adjective order","<p>Many adjectives? Use this order: <b>size → shape → colour</b>.</p><p>✔ a <b>small round blue</b> bag<br>✔ <b>long straight black</b> hair<br>✘ a blue round small bag</p>","Urutan: ukuran, bentuk, warna."],
+ ["Feature 3: Simple present tense","<p>We use <b>simple present</b> to describe facts about a person.</p><p><b>be:</b> I <b>am</b> shy. She <b>is</b> tall. They <b>are</b> kind.</p>","Simple present dipakai untuk fakta dan deskripsi."],
+ ["Feature 4: have / has and verb + s","<p><b>have</b> for I, you, they. <b>has</b> for he, she, it.</p><p>I <b>have</b> brown eyes. She <b>has</b> long hair.</p><p>Action verbs with he/she/it add <b>-s</b>: She <b>wears</b> a jacket. He <b>walks</b> slowly.</p>","He/she/it + verb-s."],
+ ["Feature 5: Pronouns","<p>We do not repeat the name again and again. We use <b>pronouns</b>: <b>he, she, it, they, his, her</b>.</p><p>Nadia is an art student. <b>She</b> has a blue jacket. <b>Her</b> bag is brown.</p>","Pronoun = kata ganti."]]};
+const CASES={
+1:{by:"Witness Report 1 · Mr. Gani, Night Guard",text:"I am Mr. Gani, the night guard of Nusantara Museum. Tonight, the Garuda Emerald is gone from its glass case. A few minutes before the alarm, I see a person near the emerald room. I do not know the name, but I remember the appearance. The person is tall and slim, about 170 centimetres. The person wears dark clothes and walks quickly with long steps. The person is not short and not fat. I cannot see the face, because the corridor is dark.",
+ ev:[0,1],elim:["toni","dewi"],clue:"The thief is <b>tall and slim</b>. Mr. Toni and Mrs. Dewi are short and heavy, so they are cleared.",
+ qs:[{q:"What is the text mainly about?",o:["A museum tour","A description of a person near the emerald room","The guard’s family","A story about dark clothes"],a:1,h:"Who does the guard describe?"},
+ {q:"“The person is tall and slim.” What does “slim” mean?",o:["fat","thin","old","noisy"],a:1,h:"Slim is the opposite of fat."},
+ {q:"Evidence 1 shows very long steps. Who probably made the prints?",o:["A short person","A tall person","A small child","Nobody"],a:1,h:"Tall people have long legs."},
+ {q:"Open the Suspects. Which two suspects do NOT match Report 1?",o:["Ms. Lina and Nadia","Mr. Hadi and Rizky","Mr. Toni and Mrs. Dewi","Nadia and Rizky"],a:2,h:"Find the two who are short and heavy."}]},
+2:{by:"Witness Report 2 · CCTV Officer Dika",text:"Officer Dika checks the camera in the corridor. Now we know more about the person from Report 1. The person has long, straight black hair. It reaches the shoulders. The person has a small nose and thin eyebrows. The person carries a brown bag. The person walks slowly near the emerald case and looks at the floor.",
+ ev:[2,3],elim:["hadi","rizky"],clue:"The thief has <b>long black hair</b> and probably wears a <b>pearl earring</b> (a woman). Mr. Hadi and Rizky are cleared. Two suspects are left!",
+ qs:[{q:"Which parts of the person does Report 2 describe?",o:["Clothes and shoes","Hair and face","Hobby and job","Name and address"],a:1,h:"Read the sentences with “has”."},
+ {q:"“It reaches the shoulders.” What does “It” refer to?",o:["The camera","The hair","The nose","The corridor"],a:1,h:"Look at the sentence before it."},
+ {q:"Evidence 4 is a pearl earring. The thief is probably…",o:["a man","a woman","a robot","a dog"],a:1,h:"Pearl earrings are usually worn by women."},
+ {q:"Which two suspects are cleared by Report 2 and the evidence?",o:["Mr. Hadi and Rizky","Ms. Lina and Nadia","Mr. Toni and Nadia","Mrs. Dewi and Ms. Lina"],a:0,h:"They are men with short hair."}]},
+3:{by:"Witness Report 3 · Mrs. Sari, Gift Shop Clerk",text:"Yesterday afternoon, a young woman visits my gift shop. She asks many questions about the Garuda Emerald. She is shy and quiet. She has big brown eyes and she wears round glasses. Her jacket is blue and her bag is brown. She speaks softly and she never smiles.",
+ ev:[4,5],elim:["lina"],clue:"The thief <b>wears round glasses</b> and a <b>blue jacket</b>. Ms. Lina has no glasses and wears a red scarf, so she is cleared.",
+ qs:[{q:"“She is shy and quiet.” This sentence describes her…",o:["appearance","personality","job","address"],a:1,h:"Shy and quiet tell us how a person behaves."},
+ {q:"In “round glasses”, the word “round” is…",o:["a verb","an adjective","a noun","an adverb"],a:1,h:"It describes the noun “glasses”."},
+ {q:"Which sentence uses simple present correctly?",o:["She wear a blue jacket.","She wears a blue jacket.","She wearing a blue jacket.","She weared a blue jacket."],a:1,h:"he/she/it + verb with -s."},
+ {q:"FINAL QUESTION: Who stole the Garuda Emerald? Use all the evidence.",o:["Mr. Hadi","Ms. Lina","Mrs. Dewi","Nadia"],a:3,h:"Tall, slim, long black hair, pearl earring, round glasses, blue jacket."}]}};
+const TIPS=["Read the title and the first sentence. Who is described?","Underline the adjectives: tall, slim, long, shy.","Check who he, she, it and they refer to.","Match every detail with the Suspects and the Evidence.","A hint costs 1 point. Try first!"];
+const done=n=>S.step>=ROUTE.findIndex(r=>r.id=="c"+n)+1;
+/* SHELL */
+function view(h,shell=1){app.innerHTML=`<div class="fade">${h}</div>`;scrollTo(0,0);hud(shell)}
+function hud(s=1){const H=$("#hud"),N=$("#nav");H.hidden=N.hidden=!(s&&S.name);if(H.hidden)return;
+ H.innerHTML=`<div class="lvl">${S.step+1}</div><div class="bar"><i style="width:${S.step*20}%"></i><span>${S.step}/5 · ${esc(S.name)}</span></div><div class="chip">🪙 ${S.score}</div><button class="gb" style="margin:0;padding:4px 10px" onclick="mute()">${muted?"🔇":"🎵"}</button>`;
+ N.innerHTML=[["desk()","🏠","HOME"],["map()","📖","CASEBOOK"],["evid()","🎒","EVIDENCE"],["sus()","👥","SUSPECTS"],["tips()","🔎","TIPS"],["report()","✉️","REPORT"]].map(b=>`<button class="gb" onclick="${b[0]}"><b>${b[1]}</b>${b[2]}</button>`).join("")}
+function modal(h){const m=document.createElement("div");m.className="modal";m.id="mod";m.innerHTML=`<div class="panel fade">${h}</div>`;document.body.appendChild(m)}
+const closeM=()=>{const m=$("#mod");if(m)m.remove()};
+function rep(){const c=[1,2,3].filter(done).map(n=>"Case "+n).join(", ")||"none";
+ const b=`Detective report\nName: ${S.name}\nClass: ${S.cls}\nProgress: ${S.step}/5 stages\nCases solved: ${c}\nScore: ${S.score}\nHints used: ${S.hints}\nStatus: ${S.step>=5?"Case closed":"Investigation in progress"}`;
+ return {b,href:`mailto:${S.email}?subject=${encodeURIComponent("Detective report - "+S.name)}&body=${encodeURIComponent(b)}`}}
+/* SCREENS */
+function cover(){closeM();view(`<div class="cover" style="background:radial-gradient(circle at 50% 35%,#1f6a4c55,transparent 60%),linear-gradient(#10243b,#06101b)">
+<div class="tape" style="top:30px;transform:rotate(-4deg)"></div><div class="tape" style="bottom:36px;transform:rotate(3deg)"></div>
+<svg width="150" height="150" viewBox="0 0 100 100"><defs><linearGradient id="em" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9ff5c4"/><stop offset="1" stop-color="#0d7a4a"/></linearGradient></defs><g stroke="${L}" stroke-width="3" stroke-linejoin="round"><polygon points="30,12 70,12 92,38 50,92 8,38" fill="url(#em)"/><polygon points="30,12 50,38 70,12" fill="#c6fbe0"/><polygon points="8,38 50,38 50,92" fill="#16a066"/><polygon points="92,38 50,38 50,92" fill="#0b6b42"/><polygon points="30,12 8,38 50,38" fill="#7fe8b0"/><polygon points="70,12 92,38 50,38" fill="#4fcb90"/></g><path d="M30 28l8-8" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>
+<p class="cd" style="font-size:22px;margin:6px 0">Nusantara Museum · Detective Escape Room</p><h1 class="ttl">THE GARUDA<br>EMERALD</h1><p style="max-width:460px">The world’s biggest emerald has vanished. Six suspects. One thief. Read, learn and solve the case!</p>
+<button class="gb gold" style="font-size:26px;padding:12px 34px" onclick="initAudio();S.name?desk():ident()">▶ START</button>${S.name?`<button class="gb" onclick="S={...S0};save();ident()">New game</button><p class="cd" style="font-size:20px">Welcome back, Detective ${esc(S.name)}!</p>`:""}<small>🎧 Turn the sound on for the full experience.</small></div>`,0)}
+function ident(){initAudio();view(`<div class="panel tc" style="max-width:520px;margin:24px auto;text-align:left"><span class="stamp">POLICE ID</span><h2>Detective ID Card</h2><p>Your results can be emailed to your teacher at any time.</p><label>Detective name</label><input id="n" value="${esc(S.name)}" autocomplete="name"><label>Class</label><input id="c" value="${esc(S.cls)}" placeholder="e.g. 7B"><label>Teacher’s email</label><input id="e" type="email" value="${esc(S.email)}" placeholder="teacher@school.com"><div class="err" id="er"></div><button class="gb gold" onclick="idOk()">Join the case</button></div>`,0)}
+function idOk(){const n=$("#n").value.trim(),c=$("#c").value.trim(),e=$("#e").value.trim();if(!n||!c||!/^\S+@\S+\.\S+$/.test(e)){$("#er").textContent="Please fill in your name, class and a valid teacher’s email.";sfx("bad");return}S.name=n;S.cls=c;S.email=e;save();desk()}
+function ob(fn,l,x,y,inner,w=120){return `<g class="obj" tabindex="0" role="button" aria-label="${l}" onclick="${fn}" onkeydown="if(event.key=='Enter')${fn}">${inner}<rect x="${x-w/2}" y="${y-14}" width="${w}" height="26" rx="13" fill="#0d2540" stroke="#f5c542" stroke-width="2.5"/><text class="lab" x="${x}" y="${y+5}">${l}</text></g>`}
+function desk(){closeM();const pol=(k,x,y,r)=>`<g transform="rotate(${r} ${x} ${y})"><rect x="${x-34}" y="${y-40}" width="68" height="84" fill="#fff" stroke="${L}" stroke-width="3"/><svg x="${x-30}" y="${y-36}" width="60" height="62" viewBox="0 0 200 210">${person(SUS[k].o)}</svg><circle cx="${x}" cy="${y-42}" r="5" fill="#d03030"/></g>`;
+ view(`<div class="panel"><p style="margin:0"><b>Tonight at Nusantara Museum,</b> the giant Garuda Emerald disappeared from its glass case. The alarm did not ring. Six people were inside. Tap the objects on your desk, Detective ${esc(S.name)}!</p></div>
+<svg viewBox="0 0 800 540" style="width:100%;display:block;border-radius:14px;border:3px solid #06121f" role="group" aria-label="Detective desk"><defs><linearGradient id="wl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d4a63"/><stop offset="1" stop-color="#0f2a3d"/></linearGradient><linearGradient id="wd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a6a3c"/><stop offset="1" stop-color="#5a3719"/></linearGradient><linearGradient id="gl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".6"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></linearGradient></defs>
+<rect width="800" height="300" fill="url(#wl)"/><g stroke="${L}" stroke-width="4"><rect x="30" y="30" width="190" height="150" fill="#0a1626"/><g fill="#243b57">${[[40,120,30,60],[75,100,28,80],[108,130,34,50],[146,90,26,90],[178,115,32,65]].map(b=>`<rect x="${b[0]}" y="${b[1]}" width="${b[2]}" height="${b[3]}" stroke="none"/>`).join("")}</g><circle cx="190" cy="62" r="16" fill="#f4efcf"/><path d="M125 30v150M30 105h190" fill="none"/>
+<rect x="270" y="24" width="360" height="190" fill="#b07a45" rx="6"/><rect x="282" y="36" width="336" height="166" fill="#d9a870"/></g>
+<path d="M330 80L450 100L570 70M450 100L420 160" stroke="#c0272d" stroke-width="3" fill="none"/>${pol("lina",330,100,-6)}${pol("nadia",450,110,4)}${pol("toni",570,95,-3)}${pol("rizky",420,158,5)}
+<g stroke="${L}" stroke-width="4"><circle cx="700" cy="70" r="44" fill="#f3f0e6"/><path d="M700 70V42M700 70l22 12" stroke-linecap="round"/></g>
+<polygon points="0,300 800,300 800,540 0,540" fill="url(#wd)" stroke="${L}" stroke-width="4"/><g stroke="#0003" stroke-width="2" fill="none"><path d="M0 330H800M0 380H800M0 440H800M0 500H800"/></g><rect x="30" y="330" width="740" height="170" rx="12" fill="#1f6b52" stroke="${L}" stroke-width="4"/>
+<g stroke="${L}" stroke-width="4" stroke-linejoin="round"><path d="M720 330L735 260L770 236" fill="none" stroke="#777" stroke-width="7"/><polygon points="752,222 796,246 776,280 736,250" fill="#d3a42c"/><polygon points="776,280 796,246 800,330 700,330" fill="url(#gl)" stroke="none"/><path d="M630 400h46v40q0 12-23 12t-23-12z" fill="#fff"/><path d="M676 410q16 0 16 16t-16 14" fill="none"/></g>
+${ob("map()","Case Book",160,478,`<g stroke="${L}" stroke-width="4" stroke-linejoin="round"><rect x="70" y="360" width="180" height="100" rx="6" fill="#7b1c24"/><rect x="82" y="352" width="160" height="96" fill="#f3ead2"/><rect x="154" y="352" width="8" height="96" fill="#7b1c24"/><path d="M96 372h44M96 388h44M96 404h30M176 372h50M176 388h50" stroke="#8a7a58" stroke-width="3" fill="none"/><path d="M215 448v34l8-8l8 8v-34z" fill="#f5c542"/></g>`)}
+${ob("sus()","Suspects",330,478,`<g transform="rotate(-4 330 410)" stroke="${L}" stroke-width="4"><path d="M262 360h50l8 12h58v90H262z" fill="#e3b866"/><rect x="274" y="378" width="86" height="76" fill="#fff"/></g><svg x="282" y="382" width="66" height="70" viewBox="0 0 200 210">${person(SUS.dewi.o)}</svg>`)}
+${ob("tips()","Tips",490,478,`<g stroke="${L}" stroke-width="4" stroke-linecap="round"><circle cx="490" cy="405" r="42" fill="#bfe3ff77" stroke="#d3a42c" stroke-width="9"/><path d="M468 392q8-14 24-14" stroke="#fff" fill="none"/><line x1="520" y1="435" x2="560" y2="480" stroke="#5a3a1e" stroke-width="14"/></g>`,90)}
+${ob("evid()","Evidence",630,478,`<g stroke="${L}" stroke-width="4" stroke-linejoin="round"><rect x="580" y="360" width="100" height="80" rx="8" fill="#e4f1f866"/><rect x="580" y="360" width="100" height="14" fill="#c0272d"/></g><svg x="590" y="380" width="30" height="34" viewBox="0 0 40 44">${earSvg.replace(/<svg[^>]*>|<\/svg>/g,"")}</svg><svg x="628" y="382" width="30" height="30" viewBox="0 0 44 44">${lensSvg.replace(/<svg[^>]*>|<\/svg>/g,"")}</svg><circle cx="618" cy="426" r="5" fill="#a4a4a4"/>`)}
+${ob("report()","Tablet",730,478,`<g stroke="${L}" stroke-width="4"><rect x="696" y="360" width="68" height="96" rx="8" fill="#16202c"/><rect x="703" y="370" width="54" height="72" rx="3" fill="#6fc3f5"/><rect x="714" y="394" width="32" height="22" fill="#fff"/><path d="M714 394l16 12l16-12" fill="none"/></g>`,90)}
+${S.step<5?`<g class="pulse" style="transform-origin:236px 346px"><circle cx="236" cy="346" r="15" fill="#f5c542" stroke="${L}" stroke-width="3"/><text x="236" y="353" text-anchor="middle" font-weight="700" font-size="20" fill="${L}">!</text></g>`:""}</svg>`)}
+function sus(){view(`<div class="panel"><h2>Suspect Line-up</h2><p>Six people were inside the museum. Tap a suspect to see the profile.</p></div><div class="scroll"><svg viewBox="0 0 920 300" style="min-width:780px;width:100%;display:block"><defs><linearGradient id="lw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef1f4"/><stop offset="1" stop-color="#b9c1ca"/></linearGradient></defs><rect width="920" height="300" fill="url(#lw)"/>${[190,180,170,160,150,140].map(c=>{const y=28+(185-c)*1.286;return `<path d="M0 ${y}H920" stroke="#7a8794" stroke-width="${c%20?1:2}"/>${c%20?"":`<text x="8" y="${y-3}" font-family="Barlow Condensed" font-weight="700" font-size="15" fill="#4a5764">${c} cm</text>`}`}).join("")}${SK.map((k,i)=>{const s=SUS[k],x=i*150+10,y=(185-s.cm)*1.286,out=S.elim.includes(k);return `<g class="sp" tabindex="0" role="button" aria-label="${s.n}" onclick="prof('${k}')" onkeydown="if(event.key=='Enter')prof('${k}')" opacity="${out?.45:1}"><svg x="${x}" y="${y}" width="150" height="196" viewBox="0 0 200 262">${person(s.o).replace(/<svg[^>]*>|<\/svg>/g,"")}</svg><rect x="${x+10}" y="262" width="130" height="28" rx="6" fill="#0d2540" stroke="#f5c542" stroke-width="2.5"/><text x="${x+75}" y="282" class="lab">${s.n}</text>${out?`<text x="${x+75}" y="190" text-anchor="middle" font-family="Barlow Condensed" font-weight="700" font-size="30" fill="#c0272d" stroke="#fff" stroke-width=".8" transform="rotate(-12 ${x+75} 190)">CLEARED</text>`:""}</g>`}).join("")}</svg></div>`)}
+function prof(k){const s=SUS[k],i=SK.indexOf(k),out=S.elim.includes(k);view(`<div class="panel" style="background:linear-gradient(#e9eef3,#c3cfdb)"><h2>${s.n} <small style="font-size:20px">· ${s.j}</small></h2>${out?`<span class="stamp">CLEARED</span>`:""}<div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center"><div style="width:230px;max-width:100%;background:linear-gradient(#eef1f4,#b9c1ca);border:3px solid #12263b;border-radius:10px;margin:auto">${person(s.o)}</div><div style="flex:1;min-width:230px"><div class="tiles"><div class="tile"><div>📏</div>${s.cm} cm</div><div class="tile"><div>${s.g=="Male"?"👨":"👩"}</div>${s.g}</div><div class="tile"><div>💇</div>${s.hair}</div><div class="tile"><div>👓</div>${s.gl}</div><div class="tile"><div>🎽</div>${s.ac}</div><div class="tile"><div>🙂</div>${s.f}</div></div></div></div></div><button class="gb" onclick="prof('${SK[(i+5)%6]}')">◀ Back</button><button class="gb gold" onclick="sus()">Line-up</button><button class="gb" onclick="prof('${SK[(i+1)%6]}')">Next ▶</button>`)}
+function evid(){view(`<div class="panel"><h2>Evidence Bag</h2><p>Items found at the crime scene. Match them with the suspects!</p><div class="ev">${EV.map((e,i)=>{const open=i<S.step*0+[0,2,4].filter(()=>1).length*0+evN();return `<div class="evc ${i<evN()?"":"lk"}"><div class="ic">${i<evN()?e[0]:"❓"}</div><div><b class="cd" style="font-size:20px">Evidence ${i+1}${i<evN()?": "+e[1]:""}</b><br>${i<evN()?e[2]:"Solve a case to find it."}</div></div>`}).join("")}</div></div>`)}
+const evN=()=>[1,2,3].filter(done).length*2;
+function tips(){view(`<div class="panel"><h2>Detective Tips</h2>${TIPS.map(t=>`<p>🔎 ${t}</p>`).join("")}</div>`)}
+function map(){view(`<div class="panel"><span class="stamp">TOP SECRET</span><h2>Case Book: The Garuda Emerald</h2><p>Follow the route. Read a file, then solve the case.</p>${ROUTE.map((r,i)=>{const st=i<S.step?"done":i==S.step?"open":"lock";return `<div class="node ${st}"><div class="badge">${st=="done"?"✔":st=="lock"?"🔒":i+1}</div><div style="flex:1"><b>${r.title}</b><br><small>${r.sub}</small></div><button class="gb ${st=="open"?"gold":""}" ${st=="lock"?"disabled":""} onclick="${r.t=="f"?`file('${r.k}',0)`:`kase(${r.k})`}">${st=="done"?"REVIEW":"OPEN"}</button></div>`}).join("")}</div>`)}
+function file(k,p){const F=FILES[k],l=p==F.length-1;view(`<div class="panel paper"><span class="stamp">FILE ${k=="A"?1:2}</span><h2>${F[p][0]}</h2>${F[p][1]}<div class="gl">🇮🇩 ${F[p][2]}</div><p><small>Page ${p+1} of ${F.length}</small></p>${p?`<button class="gb" onclick="file('${k}',${p-1})">◀ Back</button>`:""}${l?`<button class="gb gold" onclick="read('${k}')">✔ Got it!</button>`:`<button class="gb gold" onclick="file('${k}',${p+1})">Next ▶</button>`}</div>`)}
+function read(k){const i=ROUTE.findIndex(r=>r.id=="f"+k)+1;if(S.step<i){S.step=i;S.score+=5;sfx("rev")}save();map()}
+function kase(n){const C=CASES[n];cur={n,ok:[],w:[],h:[]};view(`<div class="panel paper"><span class="stamp">CASE ${n}</span><h3 style="font-size:26px">${C.by}</h3><p>${C.text}</p><div class="ev">${C.ev.map(i=>`<div class="evc"><div class="ic">${EV[i][0]}</div><div><b class="cd" style="font-size:19px">Evidence ${i+1}: ${EV[i][1]}</b><br>${EV[i][2]}</div></div>`).join("")}</div></div><div class="panel"><button class="gb" style="float:right" onclick="modal('<h2>Suspects</h2><p>Open the Suspects tab at the bottom to see all profiles.</p><button class=\\'gb\\' onclick=\\'closeM()\\'>OK</button>')">Help</button><h2>Questions</h2>${C.qs.map((q,i)=>`<div class="q" id="q${i}"><b>${i+1}. ${q.q}</b>${q.o.map((o,j)=>`<button class="opt" onclick="ans(${i},${j})">${o}</button>`).join("")}<button class="gb" style="padding:3px 10px;font-size:16px" onclick="hint(${i})">💡 Hint (-1)</button><div id="h${i}"></div></div>`).join("")}<div id="fin" hidden><button class="gb gold" style="font-size:22px" onclick="fin(${n})">🔎 Reveal the clue</button></div></div>`)}
+function ans(i,j){const q=CASES[cur.n].qs[i];if(cur.ok[i])return;const b=document.querySelectorAll(`#q${i} .opt`)[j];if(j===q.a){b.classList.add("good");cur.ok[i]=1;S.score+=cur.w[i]?5:10;sfx("ok")}else{b.classList.add("bad");b.disabled=true;cur.w[i]=1;sfx("bad")}save();hud();if(cur.ok.filter(Boolean).length==4)$("#fin").hidden=false}
+function hint(i){if(!cur.h[i]){cur.h[i]=1;S.hints++;S.score=Math.max(0,S.score-1);save();hud()}$("#h"+i).innerHTML=`<div class="hint">💡 ${CASES[cur.n].qs[i].h}</div>`}
+function fin(n){const C=CASES[n];C.elim.forEach(e=>{if(!S.elim.includes(e))S.elim.push(e)});S.step=Math.max(S.step,ROUTE.findIndex(r=>r.id=="c"+n)+1);save();sfx("rev");hud();modal(`<h2>🔎 Clue found!</h2><p>${C.clue}</p><p><small>Progress saved. Tap REPORT to email your teacher.</small></p><button class="gb gold" onclick="closeM();${n==3?"ending()":"map()"}">Continue</button>`)}
+function ending(){const r=S.score>=150?"Chief Detective":S.score>=110?"Senior Detective":"Junior Detective";view(`<div class="panel tc"><span class="stamp">CASE CLOSED</span><h2>🚔 Caught!</h2><div style="width:210px;margin:auto;background:linear-gradient(#eef1f4,#b9c1ca);border:3px solid #12263b;border-radius:10px">${person(SUS.nadia.o)}</div><p><b>Nadia</b> took the Garuda Emerald. She is tall and slim, she has long black hair, and she wears round glasses. She only wanted to copy it for an art contest, but taking it without asking is wrong. The emerald is safe again!</p><p class="cd" style="font-size:24px">Rank: ${r} · 🪙 ${S.score} · Hints: ${S.hints}</p><a class="gb gold" href="${rep().href}">✉ Email report to teacher</a></div>`)}
+function report(){const r=rep();view(`<div class="panel"><span class="stamp">REPORT</span><h2>Send report to teacher</h2><p>To: <b>${esc(S.email)}</b></p><pre style="white-space:pre-wrap;font:inherit;background:#fff;border:3px solid #12263b;border-radius:8px;padding:10px">${esc(r.b)}</pre><p><small>Your email app opens with the report ready. Press Send there. You can do this at any time.</small></p><a class="gb gold" href="${r.href}">✉ Open email</a></div>`)}
+cover();
+</script></body></html>
